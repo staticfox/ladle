@@ -16,13 +16,13 @@ AC_PROG_CC
 AC_SUBST([AM_CPPFLAGS], ['-I$(top_srcdir)/include'])
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h string.h])
+AC_CHECK_HEADERS([stdlib.h string.h sys/stat.h sys/types.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 
 # Checks for library functions.
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([strcspn])
+AC_CHECK_FUNCS([mkdir, stat, strcspn])
 
 AC_OUTPUT
