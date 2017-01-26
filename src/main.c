@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <ladle/groups.h>
 #include <ladle/memory.h>
 #include <ladle/utils.h>
 
@@ -30,15 +31,6 @@
  * atoi() and char - '0' removes that so
  * we take the lazy approach.
  */
-struct group_node {
-    char *name;
-    char *id;
-    struct group_node *next;
-    struct member_node {
-        char *name;
-        struct member_node *next;
-    } *member_root;
-} *group_root;
 
 struct user_node {
     char *name;
@@ -49,128 +41,6 @@ struct user_node {
     char *shell;
     struct user_node *next;
 } *user_root;
-
-void
-add_members_to_group(const char *member_string, struct group_node *group_position)
-{
-    static const struct member_node EMTPY_MEMBER;
-
-    if (strlen(member_string) == 0)
-        return;
-
-    struct member_node *member_position;
-    member_position = group_position->member_root;
-
-    char *token, *string, *tofree;
-    tofree = string = xstrdup(member_string);
-
-    while ((token = gen_strsep(&string, ",")) != NULL) {
-        while (member_position && member_position->next)
-            member_position = member_position->next;
-
-        member_position->next = xmalloc(sizeof(struct member_node));
-        member_position = member_position->next;
-        *member_position = EMTPY_MEMBER;
-
-        member_position->name = xstrdup(token);
-    }
-
-    xfree(tofree);
-}
-
-void
-get_groups(void)
-{
-    FILE *fp;
-    char entry[0x40B];
-    unsigned ii = 0;
-    char *token, *string, *tofree;
-    static const struct group_node EMPTY_GROUP;
-    static const struct member_node EMPTY_MEMBERS;
-
-    struct group_node *group_position;
-
-    /* Create our groups */
-    group_root = xmalloc(sizeof(struct group_node));
-    *group_root = EMPTY_GROUP;
-    group_root->next = NULL;
-
-    /* And the members */
-    group_root->member_root = xmalloc(sizeof(struct member_node));
-    *group_root->member_root = EMPTY_MEMBERS;
-    group_root->member_root->next = NULL;
-
-    group_position = group_root;
-
-    fp = popen("cat /etc/group", "r");
-    if (fp == NULL) {
-        fprintf(stderr, "Failed to run command.");
-        exit(EXIT_FAILURE);
-    }
-
-    while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
-        /* Remove all trailing newlines as we don't care about them */
-        unsigned interpoint = 1;
-
-        assert(entry[strlen(entry)] == '\0');
-        while (entry[strlen(entry) - interpoint] == '\n')
-            entry[strlen(entry) - interpoint--] = '\0';
-
-        assert(entry[strlen(entry) - 1] != '\n');
-
-        /* Alright. Now go ahead and split the group line up
-         * so we can understand what's going on. Take a copy
-         * of the original string so we don't mess it up. */
-        tofree = string = xstrdup(entry);
-
-        /* Index of the section we are in
-         * To understand this, we must first understand how
-         * the group is layed out in /etc/group.
-         * groupname:x:24:a,b,c
-         * --------- - -- -----
-         *     |     |  |   |
-         *     1     2  3   4
-         *
-         * 1) group name
-         * 2) password, usually blank. OK to ignore
-         * 3) group ID
-         * 4) users who are a member of the group
-         */
-
-        /* Create a new group node in our list. */
-        while (group_position && group_position->next)
-            group_position = group_position->next;
-
-        group_position->next = xmalloc(sizeof(struct group_node));
-        group_position = group_position->next;
-        *group_position = EMPTY_GROUP;
-
-        group_position->member_root = xmalloc(sizeof(struct member_node));
-        *group_position->member_root = EMPTY_MEMBERS;
-
-        unsigned jj = 0;
-        while ((token = gen_strsep(&string, ":")) != NULL) {
-            switch (jj) {
-            case 0:
-                group_position->name = xstrdup(token);
-                break;
-            case 2:
-                group_position->id = xstrdup(token);
-                break;
-            case 3:
-                add_members_to_group(token, group_position);
-            default:
-                break;
-            }
-            jj++;
-        }
-
-        xfree(tofree);
-        ii++;
-    }
-
-    pclose(fp);
-}
 
 void
 get_users(void)
@@ -304,46 +174,6 @@ generate_users(void)
         printf("  shell '%s'\n", user_position->shell);
         printf("end\n\n");
         user_position = user_position->next;
-    }
-}
-
-void
-clean_groups(void)
-{
-    struct group_node *group_position, *del_pos;
-
-    group_position = group_root;
-
-    /* Walk through each group */
-    while (group_position) {
-        struct member_node *member_position, *member_del_pos;
-        member_position = group_position->member_root;
-
-        /* Delete the name if it exists, otherwise
-         * it's just the anchor node. */
-        if (group_position->name)
-            xfree(group_position->name);
-
-        if (group_position->id)
-            xfree(group_position->id);
-
-        /* Delete members */
-        while (member_position) {
-            if (member_position->name)
-                xfree(member_position->name);
-
-            /* Store the pointer to the structure we want to
-             * delete, while keeping the pointer to the next
-             * node as our current position. */
-            member_del_pos = member_position;
-            member_position = member_position->next;
-            xfree(member_del_pos);
-        }
-
-        /* Same for members */
-        del_pos = group_position;
-        group_position = group_position->next;
-        xfree(del_pos);
     }
 }
 
