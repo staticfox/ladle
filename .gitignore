@@ -11,6 +11,7 @@ missing
 Makefile
 Makefile.in
 
+!include/ladle
 include/stamp-h1
 include/utils.h
 include/utils.h.in
@@ -19,3 +20,5 @@ src/.deps/
 
 *.a
 *.o
+
+ladle
