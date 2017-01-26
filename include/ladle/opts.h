@@ -1,5 +1,5 @@
 /*
- *   main.c -- Ladle - Chef Bootstrapper
+ *   opts.h -- Ladle - Chef Bootstrapper
  *   Copyright 2017 - Matt Ullman <staticfox@staticfox.net>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -17,23 +17,4 @@
  *
  */
 
-#include <ladle/groups.h>
-#include <ladle/memory.h>
-#include <ladle/opts.h>
-#include <ladle/utils.h>
-#include <ladle/users.h>
-
-int
-main(int argc, char ** argv)
-{
-    ladle_getops(argc, argv);
-
-    get_groups();
-    get_users();
-    generate_users();
-    clean_groups();
-    clean_users();
-    leakcheck();
-
-    return 0;
-}
+int ladle_getops(int argc, char **argv);
