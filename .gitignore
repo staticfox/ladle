@@ -21,4 +21,4 @@ src/.deps/
 *.a
 *.o
 
-ladle
+src/ladle
