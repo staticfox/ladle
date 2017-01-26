@@ -7,7 +7,6 @@ config.status
 configure
 depcomp
 install-sh
-ladle
 missing
 Makefile
 Makefile.in
