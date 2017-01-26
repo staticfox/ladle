@@ -135,6 +135,7 @@ get_groups(void)
                 break;
             case 3:
                 add_members_to_group(token, group_position);
+                break;
             default:
                 break;
             }
