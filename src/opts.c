@@ -36,7 +36,7 @@ show_help(const char *const program)
     printf("-vv|--verboser   Enables more debugging\n");
 }
 
-int
+void
 ladle_getops(int argc, char **argv)
 {
     static char *usage = "usage: %s [-hv] -d directory\n";
