@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.69])
+AC_PREREQ([2.68])
 AC_INIT([ladle], [0.0.0], [staticfox@staticfox.net])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_CONFIG_SRCDIR([src/main.c])

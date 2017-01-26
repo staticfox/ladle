@@ -1,0 +1,43 @@
+language: c
+
+sudo: false
+
+matrix:
+  fast_finish: true
+  include:
+    - os: linux
+      compiler: gcc
+    - os: linux
+      compiler: clang
+    - os: osx
+      compiler: gcc
+    - os: osx
+      compiler: clang
+
+addons:
+  apt:
+    packages:
+    - autoconf-archive
+
+install:
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then
+      curl -fLSs http://ftpmirror.gnu.org/autoconf-archive/autoconf-archive-2016.03.20.tar.xz | tar xJ &&
+      (
+        cd autoconf-archive-* &&
+        ./configure --prefix="$HOME" &&
+        make install;
+      );
+    fi
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then
+        brew update;
+        brew uninstall libtool;
+        brew install libtool;
+    fi
+
+script:
+  - autoreconf -fvi
+  - CFLAGS="$CFLAGS -Werror" ./configure --prefix="$HOME/travis_build"
+  - make clean
+  - make
