@@ -17,6 +17,8 @@
  *
  */
 
+#include <stdlib.h>
+
 void * xmalloc(size_t bytes);
 void * xstrdup(const char *s);
 void xfree(void *p);

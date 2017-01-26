@@ -6,4 +6,5 @@ ladle_SOURCES =  \
         groups.c \
         main.c   \
         memory.c \
-        utils.c
+        utils.c  \
+        users.c

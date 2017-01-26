@@ -1,5 +1,5 @@
 /*
- *   main.c -- Ladle - Chef Bootstrapper
+ *   users.h -- Ladle - Chef Bootstrapper
  *   Copyright 2017 - Matt Ullman <staticfox@staticfox.net>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -17,22 +17,16 @@
  *
  */
 
-#include <ladle/groups.h>
-#include <ladle/memory.h>
-#include <ladle/utils.h>
-#include <ladle/users.h>
+struct user_node {
+    char *name;
+    char *user_id;
+    char *primary_group_id;
+    char *comment;
+    char *home_directory;
+    char *shell;
+    struct user_node *next;
+} *user_root;
 
-int
-main(int argc, char ** argv)
-{
-    (void) argc; (void) argv;
-
-    get_groups();
-    get_users();
-    generate_users();
-    clean_groups();
-    clean_users();
-    leakcheck();
-
-    return 0;
-}
+void get_users(void);
+void clean_users(void);
+void generate_users(void);
