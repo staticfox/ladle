@@ -10,7 +10,18 @@ AC_CONFIG_HEADERS([include/utils.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign nostdinc subdir-objects])
 
 # Checks for programs.
-AC_PROG_CC
+AC_PROG_CC_C99
+
+dnl Enable compiler flags
+AX_CHECK_COMPILE_FLAG([-Werror], [WERROR=-Werror], [WERROR=])
+AX_CHECK_COMPILE_FLAG([$WERROR -std=c99],
+  [AX_APPEND_FLAG([-std=c99], [AM_CFLAGS])])
+AX_CHECK_COMPILE_FLAG([$WERROR -Wall],
+  [AX_APPEND_FLAG([-Wall], [AM_CFLAGS])])
+AX_CHECK_COMPILE_FLAG([$WERROR -Wextra],
+  [AX_APPEND_FLAG([-Wextra], [AM_CFLAGS])])
+AX_CHECK_COMPILE_FLAG([$WERROR -pedantic],
+  [AX_APPEND_FLAG([-pedantic], [AM_CFLAGS])])
 
 # Checks for libraries.
 AC_SUBST([AM_CPPFLAGS], ['-I$(top_srcdir)/include'])
