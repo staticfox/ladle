@@ -37,7 +37,7 @@ get_users(void)
 
     struct user_node *user_position;
 
-    /* Create our groups */
+    /* Create our users */
     user_root = xmalloc(sizeof(*user_root));
     *user_root = EMPTY_USER;
     user_root->next = NULL;
@@ -64,7 +64,7 @@ get_users(void)
 
         /* Index of the section we are in
          * To understand this, we must first understand how
-         * the group is layed out in /etc/group.
+         * the users are layed out in /etc/passwd.
          * username:x:24:23:Something Neat:/home/username:/bin/bash
          * -------- - -- -- -------------- -------------- ---------
          *     |    |  |  |       |              |            |
