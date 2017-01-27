@@ -12,10 +12,10 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign nostdinc subdir-objects])
 dnl Checks for programs.
 AC_PROG_CC_C99
 
+AX_APPEND_FLAG([-std=c99])
+
 dnl Enable compiler flags
 AX_CHECK_COMPILE_FLAG([-Werror], [WERROR=-Werror], [WERROR=])
-AX_CHECK_COMPILE_FLAG([$WERROR -std=c99],
-  [AX_APPEND_FLAG([-std=c99], [AM_CFLAGS])])
 AX_CHECK_COMPILE_FLAG([$WERROR -Wall],
   [AX_APPEND_FLAG([-Wall], [AM_CFLAGS])])
 AX_CHECK_COMPILE_FLAG([$WERROR -Wextra],
