@@ -44,7 +44,7 @@ ladle_getops(int argc, char **argv)
     const char *const command = argv[0];
     const char *const unknown = "Unknown command line arguments: ";
     char buf[512];
-    int bufpos;
+    int bufpos = 0;
     int is_directory = 0;
 
     bufpos += snprintf(buf + bufpos, sizeof(buf) - bufpos, "%s", unknown);
