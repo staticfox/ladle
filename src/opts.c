@@ -36,39 +36,31 @@ show_help(const char *const program)
     printf("-vv|--verboser   Enables more debugging\n");
 }
 
+/* Right now verbose level is maxed at 2 */
 void
 ladle_getops(int argc, char **argv)
 {
-    static char *usage = "usage: %s [-hv] -d directory\n";
+    const char *const command = argv[0];
+    const char *const unknown = "Unknown command line arguments: ";
+    char buf[512];
+    int bufpos;
+
+    bufpos += snprintf(buf + bufpos, sizeof(buf) - bufpos, "%s", unknown);
 
     if (argc < 2) {
-        show_help(argv[0]);
+        show_help(command);
         exit(EXIT_SUCCESS);
     }
 
-    for (size_t ii = 0; argv[ii]; ii++) {
-        if (strcmp(argv[ii], "-h") == 0) {
-            show_help(argv[0]);
-            exit(EXIT_SUCCESS);
-        }
-
+    for (size_t ii = 1; argv[ii]; ii++) {
         if (strcmp(argv[ii], "--help") == 0) {
-            show_help(argv[0]);
+            show_help(command);
             exit(EXIT_SUCCESS);
-        }
-
-        if (strcmp(argv[ii], "-v") == 0) {
-            options.verbose = 1;
-            continue;
         }
 
         if (strcmp(argv[ii], "--verbose") == 0) {
-            options.verbose = 1;
-            continue;
-        }
-
-        if (strcmp(argv[ii], "-vv") == 0) {
-            options.verbose = 2;
+            if (options.verbose <= 1)
+                options.verbose = 1;
             continue;
         }
 
@@ -76,5 +68,31 @@ ladle_getops(int argc, char **argv)
             options.verbose = 2;
             continue;
         }
+
+        /* Single character options */
+        if (strlen(argv[ii]) >= 2 && argv[ii][1] != '-') {
+            for (size_t jj = 1; argv[ii][jj]; ++jj) {
+                switch (argv[ii][jj]) {
+                case 'v':
+                    if (options.verbose <= 2)
+                        options.verbose++;
+                    break;
+                case 'h':
+                    show_help(command);
+                    exit(EXIT_SUCCESS);
+                default:
+                    bufpos += snprintf(buf + bufpos, sizeof(buf) - bufpos, "-%c ", argv[ii][jj]);
+                    break;
+                }
+            }
+            continue;
+        }
+
+        bufpos += snprintf(buf + bufpos, sizeof(buf) - bufpos, "%s ", argv[ii]);
+    }
+
+    if (strlen(unknown) < bufpos) {
+        fprintf(stderr, "%s\n", buf);
+        exit(EXIT_SUCCESS);
     }
 }
