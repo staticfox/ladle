@@ -21,5 +21,6 @@
 #define LADLE_INCLUDE_OPTS
 
 int ladle_getops(int argc, char **argv);
+void clear_options(void);
 
 #endif

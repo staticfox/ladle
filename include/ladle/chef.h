@@ -20,6 +20,7 @@
 #ifndef LADLE_INCLUDE_CHEF
 #define LADLE_INCLUDE_CHEF
 
-void setup_directories(const char *directory);
+void setup_directories(void);
+void setup_files(void);
 
 #endif

@@ -27,13 +27,13 @@ dnl Checks for libraries.
 AC_SUBST([AM_CPPFLAGS], ['-I$(top_srcdir)/include'])
 
 dnl Checks for header files.
-AC_CHECK_HEADERS([stdlib.h string.h sys/stat.h sys/types.h unistd.h])
+AC_CHECK_HEADERS([errno.h, ftw.h, stdlib.h string.h sys/stat.h sys/types.h unistd.h])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([mkdir, stat, strcspn])
+AC_CHECK_FUNCS([mkdir, nftw, stat, strcspn])
 
 AC_OUTPUT

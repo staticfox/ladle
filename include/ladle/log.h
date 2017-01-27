@@ -23,6 +23,7 @@
 #define LOG_USERS "users"
 #define LOG_GROUPS "groups"
 #define LOG_MEMORY "memory"
+#define LOG_CHEF "chef"
 
 enum log_level {
     LOG_INFO,

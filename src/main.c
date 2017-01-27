@@ -17,6 +17,7 @@
  *
  */
 
+#include <ladle/chef.h>
 #include <ladle/groups.h>
 #include <ladle/memory.h>
 #include <ladle/opts.h>
@@ -28,11 +29,15 @@ main(int argc, char ** argv)
 {
     ladle_getops(argc, argv);
 
+    setup_directories();
+    setup_files();
     get_groups();
     get_users();
     generate_users();
     clean_groups();
     clean_users();
+    clear_options();
+
     leakcheck();
 
     return 0;

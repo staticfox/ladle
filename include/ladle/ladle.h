@@ -22,6 +22,7 @@
 
 struct options_node {
     int verbose;
+    char *directory;
 } options;
 
 #endif

@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <ladle/ladle.h>
+#include <ladle/memory.h>
 
 static void
 show_help(const char *const program)
@@ -44,6 +45,7 @@ ladle_getops(int argc, char **argv)
     const char *const unknown = "Unknown command line arguments: ";
     char buf[512];
     int bufpos;
+    int is_directory = 0;
 
     bufpos += snprintf(buf + bufpos, sizeof(buf) - bufpos, "%s", unknown);
 
@@ -69,8 +71,13 @@ ladle_getops(int argc, char **argv)
             continue;
         }
 
+        if (strcmp(argv[ii], "--output-directory") == 0){
+            is_directory = 1;
+            continue;
+        }
+
         /* Single character options */
-        if (strlen(argv[ii]) >= 2 && argv[ii][1] != '-') {
+        if (strlen(argv[ii]) >= 2 && argv[ii][1] != '-' && !is_directory) {
             for (size_t jj = 1; argv[ii][jj]; ++jj) {
                 switch (argv[ii][jj]) {
                 case 'v':
@@ -80,11 +87,36 @@ ladle_getops(int argc, char **argv)
                 case 'h':
                     show_help(command);
                     exit(EXIT_SUCCESS);
+                case 'd':
+                    is_directory = 1;
+                    break;
                 default:
                     bufpos += snprintf(buf + bufpos, sizeof(buf) - bufpos, "-%c ", argv[ii][jj]);
                     break;
                 }
             }
+            continue;
+        }
+
+        if (is_directory) {
+            const char *bad_paths[] = {"../", "/..", "./.", ".."};
+            is_directory = 0;
+
+            for (size_t jj = 0; jj < sizeof(bad_paths) / sizeof(*bad_paths); ++jj) {
+                if (strstr(argv[ii], bad_paths[jj])) {
+                    fprintf(stderr, "%s cannot include an absolute path.\n", argv[ii]);
+                    exit(EXIT_SUCCESS);
+                }
+            }
+
+            char last_char = argv[ii][strlen(argv[ii]) - 1];
+            if (last_char == '/' || last_char == '\\') {
+                fprintf(stderr, "%s cannot end with a %c\n", argv[ii], last_char);
+                exit(EXIT_SUCCESS);
+            }
+
+            xfree(options.directory);
+            options.directory = xstrdup(argv[ii]);
             continue;
         }
 
@@ -95,4 +127,15 @@ ladle_getops(int argc, char **argv)
         fprintf(stderr, "%s\n", buf);
         exit(EXIT_SUCCESS);
     }
+
+    if (is_directory && options.directory == NULL) {
+        fprintf(stderr, "No output directory specified.\n");
+        exit(EXIT_SUCCESS);
+    }
+}
+
+void
+clear_options(void)
+{
+    xfree(options.directory);
 }
