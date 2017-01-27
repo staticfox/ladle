@@ -17,6 +17,11 @@
  *
  */
 
+#ifndef LADLE_INCLUDE_LADLE
+#define LADLE_INCLUDE_LADLE
+
 struct options_node {
     int verbose;
 } options;
+
+#endif

@@ -17,4 +17,9 @@
  *
  */
 
+#ifndef LADLE_INCLUDE_UTILS
+#define LADLE_INCLUDE_UTILS
+
 char * gen_strsep(char **stringp, const char *delim);
+
+#endif

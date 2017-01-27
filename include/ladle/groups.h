@@ -17,6 +17,9 @@
  *
  */
 
+#ifndef LADLE_INCLUDE_GROUPS
+#define LADLE_INCLUDE_GROUPS
+
 struct group_node {
     char *name;
     char *id;
@@ -29,3 +32,5 @@ struct group_node {
 
 void get_groups(void);
 void clean_groups(void);
+
+#endif

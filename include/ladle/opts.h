@@ -17,4 +17,9 @@
  *
  */
 
+#ifndef LADLE_INCLUDE_OPTS
+#define LADLE_INCLUDE_OPTS
+
 int ladle_getops(int argc, char **argv);
+
+#endif

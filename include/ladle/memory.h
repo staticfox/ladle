@@ -17,9 +17,14 @@
  *
  */
 
+#ifndef LADLE_INCLUDE_MEMORY
+#define LADLE_INCLUDE_MEMORY
+
 #include <stdlib.h>
 
 void * xmalloc(size_t bytes);
 void * xstrdup(const char *s);
 void xfree(void *p);
 void leakcheck(void);
+
+#endif

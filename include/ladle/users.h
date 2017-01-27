@@ -17,6 +17,9 @@
  *
  */
 
+#ifndef LADLE_INCLUDE_USERS
+#define LADLE_INCLUDE_USERS
+
 struct user_node {
     char *name;
     char *user_id;
@@ -30,3 +33,5 @@ struct user_node {
 void get_users(void);
 void clean_users(void);
 void generate_users(void);
+
+#endif

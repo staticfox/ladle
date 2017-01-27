@@ -17,6 +17,9 @@
  *
  */
 
+#ifndef LADLE_INCLUDE_LOG
+#define LADLE_INCLUDE_LOG
+
 enum log_level {
     LOG_INFO,
     LOG_DEBUG,
@@ -26,3 +29,5 @@ enum log_level {
 };
 
 void writelog(enum log_level level, const char *const module, const char *const message, ...);
+
+#endif
