@@ -2,6 +2,10 @@ language: c
 
 sudo: false
 
+env:
+  global:
+    - ACLOCAL_PATH=$HOME/share/aclocal${ACLOCAL_PATH+:}$ACLOCAL_PATH
+
 matrix:
   fast_finish: true
   include:
