@@ -19,8 +19,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <memory.h>
+#include <string.h>
 
 /* Mainly for debugging so we don't leak memory */
 static long num_allocs;
