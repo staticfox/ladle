@@ -132,6 +132,11 @@ ladle_getops(int argc, char **argv)
         fprintf(stderr, "No output directory specified.\n");
         exit(EXIT_SUCCESS);
     }
+
+    if (options.directory == NULL) {
+        fprintf(stderr, "usage: %s -d <directory> [options]\n", command);
+        exit(EXIT_SUCCESS);
+    }
 }
 
 void
