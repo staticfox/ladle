@@ -17,6 +17,7 @@ include/utils.h
 include/utils.h.in
 include/utils.h.in~
 src/.deps/
+src/test/
 
 *.a
 *.o
