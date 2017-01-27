@@ -20,6 +20,7 @@
 #define _XOPEN_SOURCE 600
 
 #include <assert.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -81,9 +82,9 @@ get_groups(void)
 
     group_position = group_root;
 
-    fp = popen("cat /etc/group", "r");
+    fp = fopen("/etc/group", "r");
     if (fp == NULL)
-        writelog(LOG_FATAL, LOG_GROUPS, "Failed to run command.");
+        writelog(LOG_FATAL, LOG_GROUPS, "Failed to open /etc/group: %s", strerror(errno));
 
     while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
         /* Remove all trailing newlines as we don't care about them */

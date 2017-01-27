@@ -20,6 +20,7 @@
 #define _XOPEN_SOURCE 600
 
 #include <assert.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,9 +48,9 @@ get_users(void)
 
     user_position = user_root;
 
-    fp = popen("cat /etc/passwd", "r");
+    fp = fopen("/etc/passwd", "r");
     if (fp == NULL)
-        writelog(LOG_FATAL, LOG_USERS, "Failed to run command.");
+        writelog(LOG_FATAL, LOG_USERS, "Failed to open /etc/passwd: %s", strerror(errno));
 
     while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
         /* Remove all trailing newlines as we don't care about them */
