@@ -1,3 +1,4 @@
+[![Travis](https://img.shields.io/travis/staticfox/ladle.svg?label=Travis-CI)](https://travis-ci.org/staticfox/ladle)
 # Ladle
 Ladle - Automated Chef Cookbook generator (To get you close enough)
 
