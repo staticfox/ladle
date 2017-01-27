@@ -81,4 +81,7 @@ void writelog(enum log_level level, const char *const module, const char *const 
 
 
     xfree(strlevel);
+
+    if (level == LOG_FATAL)
+        exit(EXIT_FAILURE);
 }

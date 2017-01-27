@@ -20,6 +20,10 @@
 #ifndef LADLE_INCLUDE_LOG
 #define LADLE_INCLUDE_LOG
 
+#define LOG_USERS "users"
+#define LOG_GROUPS "groups"
+#define LOG_MEMORY "memory"
+
 enum log_level {
     LOG_INFO,
     LOG_DEBUG,

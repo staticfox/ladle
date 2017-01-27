@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include <ladle/groups.h>
+#include <ladle/log.h>
 #include <ladle/memory.h>
 #include <ladle/utils.h>
 
@@ -79,10 +80,8 @@ get_groups(void)
     group_position = group_root;
 
     fp = popen("cat /etc/group", "r");
-    if (fp == NULL) {
-        fprintf(stderr, "Failed to run command.");
-        exit(EXIT_FAILURE);
-    }
+    if (fp == NULL)
+        writelog(LOG_FATAL, LOG_GROUPS, "Failed to run command.");
 
     while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
         /* Remove all trailing newlines as we don't care about them */

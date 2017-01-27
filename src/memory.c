@@ -17,9 +17,10 @@
  *
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <ladle/log.h>
 
 /* Mainly for debugging so we don't leak memory */
 static long num_allocs;
@@ -27,8 +28,7 @@ static long num_allocs;
 static void
 outofmember(void)
 {
-    fprintf(stderr, "FATAL: Out of member! (%ld allocations)\n", num_allocs);
-    exit(EXIT_FAILURE);
+    writelog(LOG_FATAL, LOG_MEMORY, "FATAL: Out of member! (%ld allocations)\n", num_allocs);
 }
 
 void *
@@ -73,5 +73,5 @@ void
 leakcheck(void)
 {
     if (num_allocs != 0)
-        printf("Memory warning: Exiting program with non-garbage collected memory in heap: %lu allocations.\n", num_allocs);
+        writelog(LOG_ERROR, LOG_MEMORY, "Memory warning: Exiting program with non-garbage collected memory in heap: %lu allocations.\n", num_allocs);
 }
