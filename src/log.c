@@ -71,7 +71,7 @@ void writelog(enum log_level level, const char *const module, const char *const 
 
     va_list ap;
     va_start(ap, message);
-    vsnprintf(buf + strlen(buf), 1024 - strlen(buf), message, ap);
+    vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), message, ap);
     va_end(ap);
 
     buf[strlen(buf)] = '\n';
