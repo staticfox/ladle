@@ -123,7 +123,7 @@ ladle_getops(int argc, char **argv)
         bufpos += snprintf(buf + bufpos, sizeof(buf) - bufpos, "%s ", argv[ii]);
     }
 
-    if (strlen(unknown) < bufpos) {
+    if (strlen(unknown) < (unsigned) bufpos) {
         fprintf(stderr, "%s\n", buf);
         exit(EXIT_SUCCESS);
     }
