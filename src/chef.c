@@ -113,6 +113,6 @@ setup_files(void)
     if (f == NULL)
         writelog(LOG_FATAL, LOG_CHEF, "Failed to open %s for writing: %s", buf, strerror(errno));
 
-    fprintf(f, file_default_data);
+    fprintf(f, "%s", file_default_data);
     fclose(f);
 }
