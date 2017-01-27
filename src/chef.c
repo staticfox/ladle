@@ -48,7 +48,7 @@ unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ft
 void
 setup_directories(void)
 {
-    struct stat st = {0};
+    struct stat st;
     char c;
 
     /* Subdirectories */
@@ -58,6 +58,8 @@ setup_directories(void)
         "resources", "templates", "files/default",
         "templates/default"
     };
+
+    memset(&st, 0, sizeof(st));
 
     /* Check if the directory already exists */
     if (stat(options.directory, &st) != -1) {
