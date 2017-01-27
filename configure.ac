@@ -36,4 +36,30 @@ dnl Checks for library functions.
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([mkdir, nftw, stat, strcspn])
 
+dnl debugging information
+AC_MSG_CHECKING(whether to enable debugging symbols)
+AC_ARG_ENABLE([debug],
+[AS_HELP_STRING([--enable-debug], [Turn on debugging])],
+[
+  AX_APPEND_FLAG([-O0])
+  AX_APPEND_FLAG([-g])
+  AC_MSG_RESULT(yes)
+],
+[
+  AC_MSG_RESULT(no)
+])
+
+dnl debugging information
+AC_MSG_CHECKING(whether to enable compiler warnings)
+AC_ARG_ENABLE([warnings],
+[AS_HELP_STRING([--enable-warnings], [Turn on warnings])],
+[
+  AX_APPEND_FLAG([-Wall])
+  AX_APPEND_FLAG([-Wextra])
+  AC_MSG_RESULT(yes)
+],
+[
+  AC_MSG_RESULT(no)
+])
+
 AC_OUTPUT
