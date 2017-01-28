@@ -34,6 +34,7 @@ main(int argc, char ** argv)
     get_groups();
     get_users();
     generate_users();
+    generate_groups();
     clean_groups();
     clean_users();
     clear_options();

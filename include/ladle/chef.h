@@ -23,5 +23,6 @@
 void setup_directories(void);
 void setup_files(void);
 void generate_users(void);
+void generate_groups(void);
 
 #endif
