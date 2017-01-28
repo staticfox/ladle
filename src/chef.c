@@ -45,6 +45,7 @@ unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ft
     if (rv)
         writelog(LOG_FATAL, LOG_CHEF, "Failed to remove directory %s: %s", fpath, strerror(errno));
 
+    writelog(LOG_DEBUG, LOG_CHEF, "Removed %s", fpath);
     return rv;
 }
 
@@ -80,6 +81,7 @@ setup_directories(void)
          * FTW_PHYS means don't follow symbolic links.
          */
         nftw(options.directory, unlink_cb, 64, FTW_DEPTH | FTW_PHYS);
+        writelog(LOG_INFO, LOG_CHEF, "Removed path %s", options.directory);
     }
 
     /* Create the root directory for the cookbook */
@@ -92,6 +94,8 @@ setup_directories(void)
 
         mkdir(buf, 0700);
     }
+
+    writelog(LOG_INFO, LOG_CHEF, "Setup directory structure in %s", options.directory);
 }
 
 void
@@ -120,6 +124,9 @@ setup_files(void)
 
     fprintf(f, "%s", file_default_data);
     fclose(f);
+
+    writelog(LOG_INFO, LOG_CHEF, "Created %s", buf);
+}
 
 void
 generate_users(void)

@@ -53,6 +53,7 @@ add_members_to_group(const char *member_string, struct group_node *group_positio
         *member_position = EMTPY_MEMBER;
 
         member_position->name = xstrdup(token);
+        writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Added member %s to groupnode %s", member_position->name, group_position->name);
     }
 
     xfree(tofree);
@@ -85,6 +86,8 @@ get_groups(void)
     fp = fopen("/etc/group", "r");
     if (fp == NULL)
         writelog(LOG_FATAL, LOG_GROUPS, "Failed to open /etc/group: %s", strerror(errno));
+
+    writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Opened /etc/group for reading");
 
     while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
         /* Remove all trailing newlines as we don't care about them */
@@ -146,6 +149,8 @@ get_groups(void)
 
         xfree(tofree);
         ii++;
+
+        writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Added groupnode %s", group_position->name);
     }
 
     pclose(fp);

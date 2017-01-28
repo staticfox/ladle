@@ -52,6 +52,8 @@ get_users(void)
     if (fp == NULL)
         writelog(LOG_FATAL, LOG_USERS, "Failed to open /etc/passwd: %s", strerror(errno));
 
+    writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Opened /etc/passwd for reading");
+
     while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
         /* Remove all trailing newlines as we don't care about them */
         unsigned interpoint = 1;
@@ -117,6 +119,8 @@ get_users(void)
 
         xfree(tofree);
         ii++;
+
+        writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Added usernode %s", user_position->name);
     }
 
 
