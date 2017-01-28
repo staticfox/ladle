@@ -5,6 +5,9 @@ sudo: false
 env:
   global:
     - ACLOCAL_PATH=$HOME/share/aclocal${ACLOCAL_PATH+:}$ACLOCAL_PATH
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    # via the "travis encrypt" command using the project repo's public key
+    - secure: hRDxnJcuAxaXOckRiS1WG5cMUAFbTRMQqjv/mROHYwCle2oP1px4VtLAkWETh/myM+QsllZOJb/6z/4TlPRYdV6YuJ0yBrf8d2qY9GPdeE0l3VRGF7oTD45GEvMQkeTzLQBCWsr1txvzEvdbKtAsxq1rzbe4sGRPVFCzzebpAOfnobboJi/vgaoaZ6lhvErAdHKjxpz5VaOljfs1bSGG5sIRIzzGUcc7JbhcNWlQ01Zsdqqr3gEQEsSE+ve3JeDYlBLRKNXMtp9fnZh0XjokF+qyae5cpFZxKp0elSjNpu1TYt/H6BPj6IxaVBp1bbokh1IG7U2LB6NBDO/mZ3cO+saZCUsG65U3jalCJgFvnM7QVHhQwJUdF7HuTFgcXXxZN5bBtjgM6PgFIdEh1FampeoQxezJ+eoiSIZCJvRbrKl2ldyCoz0AiMf1R/k+hxUB2NReV5p/a/cl4q18J2TKSC5txbjcU/m1AcDYA9K0r7KtSfNCgPNmUvYwpTPh2o/IO0bVJ3N2sObTv2lCXY2YyawgVsClxY38WeW/adRmLzeriHUn6HfErvSplSu98Rl717rOLZSFdfDi2nwX3oNGdiFzKDKkbuHiERO3aKIHLP/7A/f5mO4lG28+a3KahrR1aYFwyFTmF4L+ZPCULvS4TtigJvO9jFhB0LaWuuLOhO8=
 
 matrix:
   fast_finish: true
@@ -22,6 +25,14 @@ addons:
   apt:
     packages:
     - autoconf-archive
+  coverity_scan:
+    project:
+      name: "staticfox/ladle"
+      description: "Automated Chef Cookbook generator"
+    notification_email: staticfox@staticfox.net
+    build_command_prepend: "autoreconf -fvi; ./configure; make clean"
+    build_command: "make"
+    branch_pattern: coverity_scan
 
 install:
   - if [ "$TRAVIS_OS_NAME" = osx ]; then
