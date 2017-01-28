@@ -32,6 +32,5 @@ struct user_node {
 
 void get_users(void);
 void clean_users(void);
-void generate_users(void);
 
 #endif

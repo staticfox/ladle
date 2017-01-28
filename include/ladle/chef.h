@@ -22,5 +22,6 @@
 
 void setup_directories(void);
 void setup_files(void);
+void generate_users(void);
 
 #endif
