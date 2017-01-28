@@ -1,4 +1,5 @@
 [![Travis](https://img.shields.io/travis/staticfox/ladle.svg?label=Travis-CI)](https://travis-ci.org/staticfox/ladle)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/11600/badge.svg)](https://scan.coverity.com/projects/staticfox-ladle)
 # Ladle
 Ladle - Automated Chef Cookbook generator (To get you close enough)
 
