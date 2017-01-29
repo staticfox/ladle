@@ -86,14 +86,22 @@ setup_directories(void)
     }
 
     /* Create the root directory for the cookbook */
+#ifdef _WIN32
+    mkdir(options.directory);
+#else
     mkdir(options.directory, 0700);
+#endif
 
     /* Create each subdirectory */
     for (size_t ii = 0; ii < sizeof(directories) / sizeof(*directories); ++ii) {
         char buf[1024] = { 0 };
         snprintf(buf, sizeof(buf), "%s/%s", options.directory, directories[ii]);
 
+#ifdef _WIN32
+        mkdir(buf);
+#else
         mkdir(buf, 0700);
+#endif
     }
 
     writelog(LOG_INFO, LOG_CHEF, "Setup directory structure in %s", options.directory);
