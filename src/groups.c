@@ -60,7 +60,7 @@ add_members_to_group(const char *member_string, struct group_node *group_positio
 }
 
 void
-get_groups(void)
+get_groups(const char *const file)
 {
     FILE *fp;
     char entry[0x40B];
@@ -83,11 +83,11 @@ get_groups(void)
 
     group_position = group_root;
 
-    fp = fopen("/etc/group", "r");
+    fp = fopen(file, "r");
     if (fp == NULL)
-        writelog(LOG_FATAL, LOG_GROUPS, "Failed to open /etc/group: %s", strerror(errno));
+        writelog(LOG_FATAL, LOG_GROUPS, "Failed to open %s: %s", file, strerror(errno));
 
-    writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Opened /etc/group for reading");
+    writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Opened %s for reading", file);
 
     while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
         /* Remove all trailing newlines as we don't care about them */

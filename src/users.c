@@ -31,7 +31,7 @@
 #include <ladle/utils.h>
 
 void
-get_users(void)
+get_users(const char *const file)
 {
     FILE *fp;
     char entry[0x40B];
@@ -48,11 +48,11 @@ get_users(void)
 
     user_position = user_root;
 
-    fp = fopen("/etc/passwd", "r");
+    fp = fopen(file, "r");
     if (fp == NULL)
-        writelog(LOG_FATAL, LOG_USERS, "Failed to open /etc/passwd: %s", strerror(errno));
+        writelog(LOG_FATAL, LOG_USERS, "Failed to open %s: %s", file, strerror(errno));
 
-    writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Opened /etc/passwd for reading");
+    writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Opened %s for reading", file);
 
     while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
         /* Remove all trailing newlines as we don't care about them */

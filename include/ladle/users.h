@@ -30,7 +30,7 @@ struct user_node {
     struct user_node *next;
 } *user_root;
 
-void get_users(void);
+void get_users(const char *const file);
 void clean_users(void);
 
 #endif

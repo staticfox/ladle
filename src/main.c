@@ -31,8 +31,8 @@ main(int argc, char ** argv)
 
     setup_directories();
     setup_files();
-    get_groups();
-    get_users();
+    get_groups("/etc/group");
+    get_users("/etc/passwd");
     generate_users();
     generate_groups();
     clean_groups();

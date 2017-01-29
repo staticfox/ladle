@@ -30,7 +30,7 @@ struct group_node {
     } *member_root;
 } *group_root;
 
-void get_groups(void);
+void get_groups(const char *const file);
 void clean_groups(void);
 
 #endif
