@@ -26,7 +26,7 @@
 static long num_allocs;
 
 static void
-outofmember(void)
+outofmemory(void)
 {
     writelog(LOG_FATAL, LOG_MEMORY, "FATAL: Out of member! (%ld allocations)\n", num_allocs);
 }
@@ -37,7 +37,7 @@ xmalloc(size_t bytes)
     void *ret = malloc(bytes);
 
     if (ret == NULL)
-        outofmember();
+        outofmemory();
 
     num_allocs++;
     return ret;
@@ -50,7 +50,7 @@ xstrdup(const char *s)
     void *ret = xmalloc(size);
 
     if (ret == NULL)
-        outofmember();
+        outofmemory();
 
     memcpy(ret, s, size);
 
