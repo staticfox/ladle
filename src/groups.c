@@ -153,7 +153,7 @@ get_groups(const char *const file)
         writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Added groupnode %s", group_position->name);
     }
 
-    pclose(fp);
+    fclose(fp);
 }
 
 void
