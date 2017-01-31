@@ -77,7 +77,7 @@ ladle_getops(int argc, char **argv)
         }
 
         /* Single character options */
-        if (strlen(argv[ii]) >= 2 && argv[ii][1] != '-' && !is_directory) {
+        if (strlen(argv[ii]) >= 2 && argv[ii][0] == '-' && argv[ii][1] != '-' && !is_directory) {
             for (size_t jj = 1; argv[ii][jj]; ++jj) {
                 switch (argv[ii][jj]) {
                 case 'v':
