@@ -30,6 +30,8 @@
 #include <ladle/users.h>
 #include <ladle/utils.h>
 
+static int is_pipe = 0;
+
 static struct user_node *
 find_user(const char *const name)
 {
@@ -78,6 +80,7 @@ get_file_pointer(const char *const file)
                 if (fp == NULL)
                     writelog(LOG_ERROR, LOG_USERS, "Failed popen(): %s", strerror(errno));
 
+                is_pipe = 1;
                 return fp;
             }
         }
@@ -169,7 +172,13 @@ fail:
     }
 
 
-    pclose(fp);
+    if (is_pipe) {
+        pclose(fp);
+    } else {
+        fclose(fp);
+    }
+
+    is_pipe = 0;
 }
 
 void
