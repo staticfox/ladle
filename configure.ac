@@ -69,6 +69,7 @@ AC_ARG_ENABLE([warnings],
 [
   AX_APPEND_FLAG([-Wall])
   AX_APPEND_FLAG([-Wextra])
+  AX_APPEND_FLAG([-pedantic])
   AC_MSG_RESULT(yes)
 ],
 [
