@@ -56,7 +56,8 @@ level_to_string(enum log_level level)
     return word;
 }
 
-void writelog(enum log_level level, const char *const module, const char *const message, ...)
+void
+writelog(enum log_level level, const char *const module, const char *const message, ...)
 {
     if (level == LOG_DEBUG && options.verbose < 1)
         return;
