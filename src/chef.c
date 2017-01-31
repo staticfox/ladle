@@ -69,9 +69,11 @@ setup_directories(void)
     /* Check if the directory already exists */
     if (stat(options.directory, &st) != -1) {
         printf("%s already exists. Overwrite? [Y/n] ", options.directory);
-        c = getchar();
-        if (c != 'Y' && c != 'y')
-            exit(EXIT_SUCCESS);
+        while ((c = getchar()) != '\n' && c != EOF) {
+            if (c != 'Y' && c != 'y')
+                exit(EXIT_SUCCESS);
+        }
+        fflush(stdin);
 
         /* File Tree Walk:
          *
