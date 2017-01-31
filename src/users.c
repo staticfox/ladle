@@ -177,7 +177,6 @@ get_users(const char *const file)
 {
     FILE *fp;
     char entry[0x40B];
-    unsigned ii = 0;
     char *token, *string, *tofree;
     static const struct user_node EMPTY_USER;
 
@@ -194,7 +193,7 @@ get_users(const char *const file)
     if (fp == NULL)
         writelog(LOG_FATAL, LOG_USERS, "Failed to open %s: %s", file, strerror(errno));
 
-    writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Opened %s for reading", file);
+    writelog(LOG_DEBUG_VERBOSE, LOG_USERS, "Opened %s for reading", file);
 
     while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
         /* Remove all trailing newlines as we don't care about them */
@@ -260,9 +259,7 @@ get_users(const char *const file)
         }
 
         xfree(tofree);
-        ii++;
-
-        writelog(LOG_DEBUG_VERBOSE, LOG_CHEF, "Added usernode %s", user_position->name);
+        writelog(LOG_DEBUG_VERBOSE, LOG_USERS, "Added usernode %s", user_position->name);
     }
 
 
