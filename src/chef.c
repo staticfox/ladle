@@ -54,6 +54,7 @@ void
 setup_directories(void)
 {
     struct stat st;
+    int r1, r2;
     char c;
 
     /* Subdirectories */
@@ -91,7 +92,9 @@ setup_directories(void)
 #ifdef _WIN32
     mkdir(options.directory);
 #else
-    mkdir(options.directory, 0700);
+    r1 = mkdir(options.directory, 0700);
+    if (r1 == -1)
+        writelog(LOG_FATAL, LOG_CHEF, "Unable to create directory %s: %s", options.directory, strerror(errno));
 #endif
 
     /* Create each subdirectory */
@@ -102,7 +105,9 @@ setup_directories(void)
 #ifdef _WIN32
         mkdir(buf);
 #else
-        mkdir(buf, 0700);
+        r2 = mkdir(buf, 0700);
+        if (r2 == -1)
+            writelog(LOG_FATAL, LOG_CHEF, "Unable to create directory %s: %s", buf, strerror(errno));
 #endif
     }
 
