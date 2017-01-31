@@ -30,6 +30,148 @@
 #include <ladle/users.h>
 #include <ladle/utils.h>
 
+static struct user_node *
+find_user(const char *const name)
+{
+    struct user_node *user_position;
+    user_position = user_root;
+
+    if (name == NULL)
+        return NULL;
+
+    while (user_position) {
+        if (user_position->name == NULL) {
+            assert(user_position->next);
+            if (user_position->next != NULL) {
+                user_position = user_position->next;
+                continue;
+            }
+        }
+
+        if (strcmp(user_position->name, name) == 0)
+            return user_position;
+
+        user_position = user_position->next;
+    }
+
+    return NULL;
+}
+
+static FILE *
+get_file_pointer(const char *const file)
+{
+    FILE *fp;
+    char c;
+
+    fp = fopen(file, "r");
+
+    if (fp == NULL) {
+        writelog(LOG_ERROR, LOG_USERS, "Failed to open %s: %s", file, strerror(errno));
+
+        printf("Would you like to re-run that command as root? [Y/n] ");
+        while ((c = getchar()) != '\n' && c != EOF) {
+            if (c == 'Y' || c == 'y') {
+                /* I know. */
+                char buf[1024];
+                snprintf(buf, sizeof(buf), "sudo cat %s", file);
+                fp = popen(buf, "r");
+                if (fp == NULL)
+                    writelog(LOG_ERROR, LOG_USERS, "Failed popen(): %s", strerror(errno));
+
+                return fp;
+            }
+        }
+
+        printf("Would you like to continue with less accurate results? [Y/n] ");
+        while ((c = getchar()) != '\n' && c != EOF) {
+            if (c != 'Y' && c != 'y')
+                exit(EXIT_SUCCESS);
+        }
+
+    }
+
+    return fp;
+}
+
+static void
+get_user_attributes(const char *const file)
+{
+    FILE *fp;
+    char entry[0x40B];
+    char *token, *string, *tofree;
+
+    fp = get_file_pointer(file);
+
+    if (fp == NULL)
+        return;
+
+    writelog(LOG_DEBUG_VERBOSE, LOG_USERS, "Opened %s for reading", file);
+
+    while (fgets(entry, sizeof(entry) - 1, fp) != NULL) {
+        /* Remove all trailing newlines as we don't care about them */
+        struct user_node *user = NULL;
+        unsigned interpoint = 1;
+
+        assert(entry[strlen(entry)] == '\0');
+        while (entry[strlen(entry) - interpoint] == '\n')
+            entry[strlen(entry) - interpoint--] = '\0';
+
+        assert(entry[strlen(entry) - 1] != '\n');
+
+        tofree = string = xstrdup(entry);
+
+        /* Index of the section we are in
+         * To understand this, we must first understand how
+         * the users are layed out in /etc/passwd.
+         * static:$somehash$goeshere/:17123:0:99999:7:_:_:_
+         * ------ ------------------- ----- - ----- - - - -
+         *    |           |             |   |   |   | | | |
+         *    1           2             3   4   5   6 7 8 9
+         *
+         * 1) user name
+         * 2) password. If invalid (*, !) the user cannot
+         *    login via password. If it starts with a !, then
+         *    the account is locked.
+         *
+         * 3) Date since last password change. Expressed as the
+         *    number of days since epoch.
+         *
+         * 4) Minimum password age
+         * 5) Maximum password age
+         * 6) Password warning period
+         * 7) Password inactivity period
+         * 8) Account expiration date
+         * 9) Reserved
+         */
+
+        unsigned jj = 0;
+        while ((token = gen_strsep(&string, ":")) != NULL) {
+            switch (jj) {
+            case 0:
+                user = find_user(token);
+                if (user == NULL) {
+                    writelog(LOG_ERROR, LOG_USERS, "Unable to find user %s in %s!", token, file);
+                    goto fail;
+                }
+                break;
+            case 1:
+                if (token == NULL || token[0] == '!' || token[0] == 'x')
+                    user->locked = 1;
+                break;
+            default:
+                break;
+            }
+            jj++;
+        }
+
+fail:
+        xfree(tofree);
+    }
+
+
+    pclose(fp);
+}
+
 void
 get_users(const char *const file)
 {
@@ -125,6 +267,8 @@ get_users(const char *const file)
 
 
     pclose(fp);
+
+    get_user_attributes("/etc/shadow");
 }
 
 void
