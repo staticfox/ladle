@@ -27,6 +27,7 @@ struct user_node {
     char *comment;
     char *home_directory;
     char *shell;
+    int locked;
     struct user_node *next;
 } *user_root;
 
