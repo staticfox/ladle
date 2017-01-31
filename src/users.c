@@ -263,7 +263,7 @@ get_users(const char *const file)
     }
 
 
-    pclose(fp);
+    fclose(fp);
 
     get_user_attributes("/etc/shadow");
 }
