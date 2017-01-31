@@ -25,10 +25,15 @@
 /* Mainly for debugging so we don't leak memory */
 static long num_allocs;
 
-static void
+static __attribute__((noreturn)) void
 outofmemory(void)
 {
     writelog(LOG_FATAL, LOG_MEMORY, "FATAL: Out of member! (%ld allocations)\n", num_allocs);
+
+    /* LOG_FATAL technically already calls exit()
+     * but the compiler doesn't know that.
+     */
+    exit(EXIT_FAILURE);
 }
 
 void *
