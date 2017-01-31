@@ -163,27 +163,19 @@ generate_users(void)
         "#\n"
         "# All rights reserved - Do Not Redistribute\n"
         "#\n\n";
-    const char *noshell[] = {"/usr/bin/nologin", "/sbin/nologin", "/bin/nologin", "/bin/false"};
 
     fprintf(f, "%s", file_default_data);
     while (user_position) {
-        int found = 0;
-
         if (user_position->name == NULL)
             user_position = user_position->next;
 
         fprintf(f, "user '%s' do\n", user_position->name);
 
-        for (size_t ii = 0; ii < (sizeof(noshell) / sizeof(*noshell)); ++ii) {
-            if (strcmp(user_position->shell, noshell[ii]) == 0) {
-                fprintf(f, "  action :lock\n");
-                found = 1;
-                break;
-            }
-        }
-
-        if (!found)
+        if (user_position->locked) {
+            fprintf(f, "  action :lock\n");
+        } else {
             fprintf(f, "  action :create\n");
+        }
 
         fprintf(f, "  comment '%s'\n", user_position->comment);
         fprintf(f, "  uid '%s'\n", user_position->user_id);
