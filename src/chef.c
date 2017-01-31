@@ -166,8 +166,10 @@ generate_users(void)
 
     fprintf(f, "%s", file_default_data);
     while (user_position) {
-        if (user_position->name == NULL)
+        if (user_position->name == NULL) {
             user_position = user_position->next;
+            continue;
+        }
 
         fprintf(f, "user '%s' do\n", user_position->name);
 
