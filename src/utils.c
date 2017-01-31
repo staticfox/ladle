@@ -19,8 +19,6 @@
 
 #include <string.h>
 
-#include <utils.h>
-
 char *
 gen_strsep(char **stringp, const char *delim)
 {
