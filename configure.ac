@@ -49,6 +49,19 @@ AC_ARG_ENABLE([debug],
   AC_MSG_RESULT(no)
 ])
 
+dnl Whether we want a statically linked build
+AC_MSG_CHECKING(whether to enable static linking)
+AC_ARG_ENABLE([static],
+[AS_HELP_STRING([--enable-static], [Turn on static linking])],
+[
+  AC_SUBST([AM_STATICFLAG], ['-static'])
+  AC_MSG_RESULT(yes)
+],
+[
+AC_SUBST([AM_STATICFLAG], [''])
+  AC_MSG_RESULT(no)
+])
+
 dnl debugging information
 AC_MSG_CHECKING(whether to enable compiler warnings)
 AC_ARG_ENABLE([warnings],

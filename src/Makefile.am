@@ -11,3 +11,5 @@ ladle_SOURCES =  \
         memory.c \
         utils.c  \
         users.c
+
+ladle_LDFLAGS = @AM_STATICFLAG@
