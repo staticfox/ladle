@@ -45,8 +45,9 @@ unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ft
 
     if (rv)
         writelog(LOG_FATAL, LOG_CHEF, "Failed to remove directory %s: %s", fpath, strerror(errno));
+    else
+        writelog(LOG_DEBUG, LOG_CHEF, "Removed %s", fpath);
 
-    writelog(LOG_DEBUG, LOG_CHEF, "Removed %s", fpath);
     return rv;
 }
 
