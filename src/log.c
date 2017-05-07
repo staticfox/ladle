@@ -77,9 +77,7 @@ writelog(enum log_level level, const char *const module, const char *const messa
 
     buf[strlen(buf)] = '\n';
 
-
     fprintf(stream, "%s", buf);
-
 
     xfree(strlevel);
 
