@@ -20,7 +20,7 @@
 #include <string.h>
 
 char *
-gen_strsep(char **stringp, const char *delim)
+gen_strsep(char **const stringp, const char *const delim)
 {
     char *p = *stringp;
 
